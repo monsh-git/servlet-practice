@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원목록2</title>
+<title>User List</title>
 </head>
 <style>
 	h1 {
@@ -46,6 +46,11 @@
 </style>
 <body>
 <h1>회원 목록</h1>
+<ul>
+	<li><a href="board-list.do">게시판</a></li>
+	<li><a href="logout.do">로그아웃</a></li>
+</ul>
+<br>
 	<table >
 		<tr>
 			<td colspan="3">전체 회원 수 : ${pagination.userCount}</td>

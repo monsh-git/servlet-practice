@@ -126,19 +126,91 @@ public class Controller extends HttpServlet {
 				break;
 				
 			case "/board-insert-process.do":
-				session = request.getSession();
 				Board board = new Board();
 				board.setB_title(request.getParameter("title"));
 				board.setB_content(request.getParameter("content"));
 				board.setB_date(request.getParameter("date"));
 				board.setB_writer(request.getParameter("writer"));
 				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
+				board.setB_group_idx(0);
+				board.setB_layer_idx(0);
 				
 				boardService = BoardService.getInstance();
 				boardService.insertBoard(board);
 				
 				view = "board/insert-result";
 				break;
+				
+			case "/board-detail.do":
+				String b_idx = request.getParameter("b_idx");
+				boardService = BoardService.getInstance();
+				board = boardService.getBoard(b_idx);
+				
+				request.setAttribute("board", board);
+				
+				view = "board/detail";
+				break;
+				
+			case "/board-edit.do":
+				b_idx = request.getParameter("b_idx");
+				boardService = BoardService.getInstance();
+				board = boardService.getBoard(b_idx);
+				
+				request.setAttribute("board", board);
+				
+				view = "board/edit";
+				break;
+				
+			case "/board-edit-process.do":
+				board = new Board();
+				board.setB_idx(Integer.parseInt(request.getParameter("edit_b_idx")));
+				board.setB_title(request.getParameter("edit_title"));
+				board.setB_content(request.getParameter("edit_content"));
+				board.setB_date(request.getParameter("edit_date"));
+				board.setB_writer(request.getParameter("edit_writer"));
+				board.setU_idx(Integer.parseInt(request.getParameter("edit_u_idx")));
+				
+				boardService = BoardService.getInstance();
+				boardService.editBoard(board);
+				
+				view = "board/edit-result";
+				break;
+				
+			case "/board-delete.do":
+				b_idx = request.getParameter("b_idx");
+				boardService = BoardService.getInstance();
+				boardService.deleteBoard(b_idx);
+				
+				view = "board/delete-result";
+				break;
+				
+			case "/board-reply.do":
+				b_idx = request.getParameter("b_idx");
+				boardService = BoardService.getInstance();
+				board = boardService.getBoard(b_idx);
+				
+				request.setAttribute("board", board);
+				
+				view = "board/reply";
+				break;
+				
+			case "/board-reply-process.do":
+				board = new Board();
+				board.setB_title(request.getParameter("b_title"));
+				board.setB_content(request.getParameter("b_content"));
+				board.setB_date(request.getParameter("b_date"));
+				board.setB_writer(request.getParameter("b_writer"));
+				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
+				board.setB_origin(Integer.parseInt(request.getParameter("b_origin")));
+				board.setB_group_idx(Integer.parseInt(request.getParameter("b_group_idx")));
+				board.setB_layer_idx(Integer.parseInt(request.getParameter("b_layer_idx")));
+				
+				boardService = BoardService.getInstance();
+				boardService.replyBoard(board);
+				
+				view = "board/reply-result";
+				break;
+				
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(view + ".jsp");
@@ -149,15 +221,21 @@ public class Controller extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		String[] authList = {
+				"/logout.do",
 				"/user-list.do",
+				"/user-detail.do",
 				"/user-insert.do",
 				"/user-insert-process.do",
-				"/user-detail.do",
 				"/user-edit.do",
 				"/user-edit-process.do",
+				"/board-list.do",
+				"/board-detail.do",
 				"/board-insert.do",
 				"/board-insert-process.do",
-				"/logout.do"
+				"/board-edit.do",
+				"/board-edit-process.do",
+				"/board-delete.do",
+				"/board-reply.do"
 		};
 		
 		for (String item : authList) {

@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Saved Post</title>
+<title>Post Edit Completed</title>
 </head>
 <body>
-<h1>Posting Completed</h1>
-<a href="/lcomputerstudy/board-list.do">Back to the board list</a>
+<h1>Save Completed</h1>
+<a href="/lcomputerstudy/board-list.do">Go to the list</a>
 </body>
 </html>

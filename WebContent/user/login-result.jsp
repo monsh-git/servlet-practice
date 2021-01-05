@@ -44,6 +44,7 @@
 <body>
 <div>${sessionScope.user.u_name }님 로그인 성공</div>
 	<ul>
+		<li><a href="board-list.do">게시판</a></li>
 		<li><a href="user-list.do">회원 목록</a></li>
 		<li><a href="logout.do">로그아웃</a></li>
 	</ul>

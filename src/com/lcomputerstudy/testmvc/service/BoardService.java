@@ -27,7 +27,23 @@ public class BoardService {
 		return dao.getBoards();
 	}
 	
+	public Board getBoard(String b_idx) {
+		return dao.getBoard(b_idx);
+	}
+	
 	public void insertBoard(Board board) {
 		dao.insertBoard(board);
+	}
+	
+	public void editBoard(Board board) {
+		dao.editBoard(board);
+	}
+	
+	public void deleteBoard(String b_idx) {
+		dao.deleteBoard(b_idx);
+	}
+	
+	public void replyBoard(Board board) {
+		dao.replyBoard(board);
 	}
 }

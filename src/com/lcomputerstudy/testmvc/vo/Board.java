@@ -7,6 +7,9 @@ public class Board {
 	private String b_date;
 	private String b_writer;
 	private int u_idx;
+	private int b_origin;		// the idx of an origin board
+	private int b_group_idx;	// an index in a group
+	private int b_layer_idx;	// an index of layer in a group
 	
 	public int getB_idx() {
 		return b_idx;
@@ -43,5 +46,23 @@ public class Board {
 	}
 	public void setU_idx(int u_idx) {
 		this.u_idx = u_idx;
+	}
+	public int getB_origin() {
+		return b_origin;
+	}
+	public void setB_origin(int b_origin) {
+		this.b_origin = b_origin;
+	}
+	public int getB_group_idx() {
+		return b_group_idx;
+	}
+	public void setB_group_idx(int b_group_idx) {
+		this.b_group_idx = b_group_idx;
+	}
+	public int getB_layer_idx() {
+		return b_layer_idx;
+	}
+	public void setB_layer_idx(int b_layer_idx) {
+		this.b_layer_idx = b_layer_idx;
 	}
 }

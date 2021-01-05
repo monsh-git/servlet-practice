@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시글 목록</title>
+<title>Board</title>
 </head>
 <style>
 	h1 {
@@ -45,27 +45,32 @@
 	}
 </style>
 <body>
-<h1>게시글 목록</h1>
-	<table>
-		<tr>
-			<th>No</th>
-			<th>제목</th>
-			<th>작성자</th>
-			<th>작성일</th>
-		</tr>
-		<c:forEach items="${list }" var="item">
-			<tr>
-				<td>${item.b_idx}</td>
-				<td>${item.b_title}</td>
-				<td>${item.b_writer}</td>
-				<td>${item.b_date}</td>
-			</tr>
-		</c:forEach>
-		<tr style="height:50px;">
-			<td style="border:none;">
-				<a href="board-insert.do" style="width:70%; font-weight:700; background-color:#818181; color:#fff;">글 쓰기</a>
-			</td>
+<h1>Board</h1>
+<ul>
+	<li><a href="user-list.do">User List</a></li>
+	<li><a href="logout.do">Logout</a></li>
+</ul>
+<br>
+<table>
+	<tr>
+		<th>No</th>
+		<th>제목</th>
+		<th>작성자</th>
+		<th>작성일</th>
 	</tr>
-	</table>
+	<c:forEach items="${list}" var="item">
+	<tr>
+		<td>${item.b_idx}</td>
+		<td><a href="board-detail.do?b_idx=${item.b_idx}">${item.b_title}</a></td>
+		<td>${item.b_writer}</td>
+		<td>${item.b_date}</td>
+	</tr>
+	</c:forEach>
+	<tr style="height:50px;">
+		<td style="border:none;">
+			<a href="board-insert.do" style="width:70%; font-weight:700; background-color:#818181; color:#fff;">글 쓰기</a>
+		</td>
+	</tr>
+</table>
 </body>
 </html>
