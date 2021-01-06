@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.lcomputerstudy.testmvc.service.BoardService;
 import com.lcomputerstudy.testmvc.service.UserService;
 import com.lcomputerstudy.testmvc.vo.Board;
+import com.lcomputerstudy.testmvc.vo.Comment;
 import com.lcomputerstudy.testmvc.vo.Pagination;
 import com.lcomputerstudy.testmvc.vo.User;
 
@@ -145,8 +146,10 @@ public class Controller extends HttpServlet {
 				String b_idx = request.getParameter("b_idx");
 				boardService = BoardService.getInstance();
 				board = boardService.getBoard(b_idx);
+				ArrayList<Comment> c_list = boardService.getComments(b_idx);
 				
 				request.setAttribute("board", board);
+				request.setAttribute("c_list", c_list);
 				
 				view = "board/detail";
 				break;

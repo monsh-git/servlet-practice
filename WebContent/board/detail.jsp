@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,6 +40,17 @@
 		<td>Content</td>
 		<td>${board.b_content}</td>
 	</tr>
+</table>
+
+<!-- Comments -->
+<table>
+	<c:forEach items="${c_list}" var="comment">
+	<tr>
+		<td>${comment.u_idx}</td>
+		<td>${comment.c_content}</td>
+		<td>${comment.c_date}</td>
+	</tr>
+	</c:forEach>
 </table>
 </body>
 </html>

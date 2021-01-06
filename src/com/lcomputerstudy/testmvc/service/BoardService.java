@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.lcomputerstudy.testmvc.dao.BoardDAO;
 import com.lcomputerstudy.testmvc.vo.Board;
-import com.lcomputerstudy.testmvc.vo.User;
+import com.lcomputerstudy.testmvc.vo.Comment;
 
 public class BoardService {
 	
@@ -29,6 +29,10 @@ public class BoardService {
 	
 	public Board getBoard(String b_idx) {
 		return dao.getBoard(b_idx);
+	}
+	
+	public ArrayList<Comment> getComments(String b_idx){
+		return dao.getComments(b_idx);
 	}
 	
 	public void insertBoard(Board board) {

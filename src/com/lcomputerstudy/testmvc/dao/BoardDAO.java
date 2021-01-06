@@ -8,10 +8,15 @@ import java.util.ArrayList;
 
 import com.lcomputerstudy.testmvc.database.DBConnection;
 import com.lcomputerstudy.testmvc.vo.Board;
-import com.lcomputerstudy.testmvc.vo.User;
+import com.lcomputerstudy.testmvc.vo.Comment;
 
 public class BoardDAO {
 	private static BoardDAO dao = null;
+	
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	String query = null;
 	
 	private BoardDAO() {
 		
@@ -25,15 +30,12 @@ public class BoardDAO {
 	}
 	
 	public ArrayList<Board> getBoards(){
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		ArrayList<Board> list = null;
 		
 		try {
 			conn = DBConnection.getConnection();
 			
-			String query = "SELECT * FROM board ORDER BY b_origin DESC, b_group_idx ASC";
+			query = "SELECT * FROM board ORDER BY b_origin DESC, b_group_idx ASC";
 			pstmt = conn.prepareStatement(query);
 			rs = pstmt.executeQuery();
 			list = new ArrayList<Board>();
@@ -73,15 +75,12 @@ public class BoardDAO {
 	}
 	
 	public Board getBoard(String b_idx) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		Board board = null;
 		
 		try {
 			conn = DBConnection.getConnection();
 			
-			String query = "SELECT * FROM board WHERE b_idx=?";
+			query = "SELECT * FROM board WHERE b_idx=?";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, b_idx);
 			rs = pstmt.executeQuery();
@@ -97,6 +96,15 @@ public class BoardDAO {
 				board.setB_origin(rs.getInt("b_origin"));
 				board.setB_group_idx(rs.getInt("b_group_idx"));
 				board.setB_layer_idx(rs.getInt("b_layer_idx"));
+			}
+			
+			query = "SELECT count(*) FROM comment WHERE b_idx=?";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, board.getB_idx());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				board.setB_c_count(rs.getInt(1));
 			}
 			
 		} catch (Exception e) {
@@ -115,12 +123,10 @@ public class BoardDAO {
 	}
 	
 	public void insertBoard(Board board) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-
+		
 		try {
 			conn = DBConnection.getConnection();
-			String query = "INSERT INTO board(b_title, b_content, b_date, b_writer, u_idx, b_origin, b_group_idx, b_layer_idx) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+			query = "INSERT INTO board(b_title, b_content, b_date, b_writer, u_idx, b_origin, b_group_idx, b_layer_idx) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, board.getB_title());
 			pstmt.setString(2, board.getB_content());
@@ -153,12 +159,10 @@ public class BoardDAO {
 	}
 	
 	public void editBoard(Board board) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
 		
 		try {
 			conn = DBConnection.getConnection();
-			String query = "UPDATE board SET b_title=?, b_content=? WHERE b_idx=?";
+			query = "UPDATE board SET b_title=?, b_content=? WHERE b_idx=?";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, board.getB_title());
 			pstmt.setString(2, board.getB_content());
@@ -177,12 +181,10 @@ public class BoardDAO {
 	}
 	
 	public void deleteBoard(String b_idx) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
 		
 		try {
 			conn = DBConnection.getConnection();
-			String query = "DELETE FROM board WHERE b_idx=?";
+			query = "DELETE FROM board WHERE b_idx=?";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, b_idx);
 			pstmt.executeUpdate();
@@ -199,9 +201,6 @@ public class BoardDAO {
 	}
 	
 	public void replyBoard(Board board) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		String query = "";
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -240,5 +239,42 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public ArrayList<Comment> getComments(String b_idx){
+		
+		Comment comment = null;
+		ArrayList<Comment> c_list = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			query = "SELECT * FROM comment WHERE b_idx=?";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, b_idx);
+			rs = pstmt.executeQuery();
+			c_list = new ArrayList<Comment>();
+			
+			while(rs.next()) {
+				comment = new Comment();
+				comment.setC_idx(rs.getInt("c_idx"));
+				comment.setB_idx(rs.getInt("b_idx"));
+				comment.setU_idx(rs.getInt("u_idx"));
+				comment.setC_content(rs.getString("c_content"));
+				comment.setC_date(rs.getDate("c_date"));
+				c_list.add(comment);
+			}
+			
+		} catch(Exception e) {
+			System.out.println("Exception on getComments : " + e.getMessage());
+		} finally {
+			try {
+				if (pstmt != null) pstmt.close();
+				if (conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return c_list;
 	}
 }

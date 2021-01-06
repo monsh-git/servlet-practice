@@ -10,6 +10,7 @@ public class Board {
 	private int b_origin;		// the idx of an origin board
 	private int b_group_idx;	// an index in a group
 	private int b_layer_idx;	// an index of layer in a group
+	private int b_c_count;
 	
 	public int getB_idx() {
 		return b_idx;
@@ -65,4 +66,11 @@ public class Board {
 	public void setB_layer_idx(int b_layer_idx) {
 		this.b_layer_idx = b_layer_idx;
 	}
+	public int getB_c_count() {
+		return b_c_count;
+	}
+	public void setB_c_count(int b_c_count) {
+		this.b_c_count = b_c_count;
+	}
+	
 }
