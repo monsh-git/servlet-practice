@@ -80,6 +80,7 @@ public class BoardDAO {
 		try {
 			conn = DBConnection.getConnection();
 			
+			// SELECT a specific board
 			query = "SELECT * FROM board WHERE b_idx=?";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, b_idx);
@@ -98,6 +99,7 @@ public class BoardDAO {
 				board.setB_layer_idx(rs.getInt("b_layer_idx"));
 			}
 			
+			// COUNT(comments) of the specific board above
 			query = "SELECT count(*) FROM comment WHERE b_idx=?";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, board.getB_idx());
@@ -248,7 +250,10 @@ public class BoardDAO {
 		
 		try {
 			conn = DBConnection.getConnection();
-			query = "SELECT * FROM comment WHERE b_idx=?";
+			query = "SELECT * "
+					+ "FROM comment "
+					+ "WHERE b_idx = ? "
+					+ "ORDER BY c_idx DESC";
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, b_idx);
 			rs = pstmt.executeQuery();

@@ -14,7 +14,7 @@
 	<p> Date : <input type="text" name="date"></p>
 	<input type="hidden" name="writer" value=${sessionScope.user.u_id}>
 	<input type="hidden" name="u_idx" value=${sessionScope.user.u_idx}>
-	<p> <input type="submit" value="글 저장"></p>
+	<p> <input type="submit" value="Save"></p>
 </form>
 </body>
 </html>

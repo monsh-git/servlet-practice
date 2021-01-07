@@ -1,6 +1,6 @@
 package com.lcomputerstudy.testmvc.vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Comment {
 	private int c_idx;

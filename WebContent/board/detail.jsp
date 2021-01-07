@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Post View</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
 <body>
 <ul>
@@ -42,15 +43,70 @@
 	</tr>
 </table>
 
+<!-- Comment Insert -->
+<button id="commentInsertBtn">Save Comment</button>
+
+
 <!-- Comments -->
-<table>
-	<c:forEach items="${c_list}" var="comment">
-	<tr>
-		<td>${comment.u_idx}</td>
-		<td>${comment.c_content}</td>
-		<td>${comment.c_date}</td>
-	</tr>
-	</c:forEach>
+<table id="commentContainer">
+
 </table>
+
+<script>
+let obj = {
+	comment_list: function () {
+		$.ajax({
+			method: "GET",
+			url: "/lcomputerstudy/comment-read.do",
+			dataType: "json",
+			data:{
+				b_idx: "${board.b_idx}"
+			}
+		})
+		.done(function(json){
+			let html = "";
+			$.each(json, function(index, item){
+				html += "<tr align='center'>";
+	            html += "<td>" + item.u_idx + "</td>";
+	            html += "<td align='left'>" + item.c_content + "</td>";
+	            let date = item.c_date.substring(0, 10);
+	            html += "<td>" + date + "</td>";
+	            html += "</tr>";
+			})
+			$('#commentContainer').html(html);
+		});
+	},
+	comment_insert: function() {
+		
+	}
+};
+
+obj.comment_list();
+
+$(document).on('click', '#commentInsertBtn', function(){
+	$.ajax({
+		url: "/lcomputerstudy/comment-insert.do",
+		
+	})
+});
+</script>
+
+<!-- Ajax Example
+<button id="btn">button</button>
+
+<script>
+$(document).on('click', '#btn', function () {
+	$.ajax({
+	  method: "POST",
+	  url: "some.php",
+	  data: { name: "John", location: "Boston" }
+	})
+	  .done(function( html ) {
+	    $('#ddd').html(html);
+	  });
+});
+</script>
+ -->
+ 
 </body>
 </html>

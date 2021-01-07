@@ -1,7 +1,11 @@
 package com.lcomputerstudy.testmvc.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lcomputerstudy.testmvc.service.BoardService;
 import com.lcomputerstudy.testmvc.service.UserService;
 import com.lcomputerstudy.testmvc.vo.Board;
@@ -28,7 +34,9 @@ public class Controller extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=utf-8");
+		request.setCharacterEncoding("utf-8");
 		
+		// 
 		String requestURI = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestURI.substring(contextPath.length());
@@ -39,10 +47,14 @@ public class Controller extends HttpServlet {
 		String pw = null;
 		int page = 1;
 		
-		command = checkSession(request, response, command);
+		Comment comment = null;
+		ArrayList<Comment> c_list = null;
 		
-		response.setContentType("text/html; charset=utf-8");
-		request.setCharacterEncoding("utf-8");
+		Gson gson = null;
+		String jsonStr = null;
+		PrintWriter p_writer = null;
+		
+		command = checkSession(request, response, command);
 		
 		switch (command) {
 			case "/user-list.do":
@@ -146,11 +158,9 @@ public class Controller extends HttpServlet {
 				String b_idx = request.getParameter("b_idx");
 				boardService = BoardService.getInstance();
 				board = boardService.getBoard(b_idx);
-				ArrayList<Comment> c_list = boardService.getComments(b_idx);
-				
+								
 				request.setAttribute("board", board);
-				request.setAttribute("c_list", c_list);
-				
+								
 				view = "board/detail";
 				break;
 				
@@ -214,10 +224,49 @@ public class Controller extends HttpServlet {
 				view = "board/reply-result";
 				break;
 				
+			case "/comment-read.do":
+				response.setContentType("application/json");
+
+				b_idx = request.getParameter("b_idx");
+				boardService = BoardService.getInstance();
+				c_list = boardService.getComments(b_idx);
+				
+				gson = new GsonBuilder().setPrettyPrinting().create();
+				jsonStr = gson.toJson(c_list);
+				p_writer = response.getWriter();
+				p_writer.print(jsonStr);
+				p_writer.flush();
+				
+				view = null;
+				break;
+				
+			case "/comment-insert.do":
+				response.setContentType("application/json");
+				
+				comment = new Comment();
+				comment.setC_idx(Integer.parseInt(request.getParameter("c_idx")));
+				comment.setB_idx(Integer.parseInt(request.getParameter("b_idx")));
+				comment.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
+				comment.setC_content(request.getParameter("c_content"));
+				String c_date_str = request.getParameter("c_date");
+				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date c_date;
+				try {
+					c_date = transFormat.parse(c_date_str);
+					comment.setC_date(c_date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				view = null;
+				break;
 		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher(view + ".jsp");
-		rd.forward(request, response);
+		if (view != null) {
+			RequestDispatcher rd = request.getRequestDispatcher(view + ".jsp");
+			rd.forward(request, response);
+		}
 	}
 	
 	String checkSession(HttpServletRequest request, HttpServletResponse response, String command) {
@@ -238,7 +287,8 @@ public class Controller extends HttpServlet {
 				"/board-edit.do",
 				"/board-edit-process.do",
 				"/board-delete.do",
-				"/board-reply.do"
+				"/board-reply.do",
+				"/comment-insert.do"
 		};
 		
 		for (String item : authList) {
