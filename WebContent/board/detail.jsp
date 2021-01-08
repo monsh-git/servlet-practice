@@ -44,8 +44,17 @@
 </table>
 
 <!-- Comment Insert -->
-<button id="commentInsertBtn">Save Comment</button>
-
+<div>
+	<textarea rows="2" id="c_content" placeholder="Type your comment here" style="width:100%"></textarea>
+	<div>
+		<c:if test="${sessionScope.user.u_id == null}">
+			<input type="button" value="Save Comment" disabled="disabled">
+		</c:if>
+		<c:if test="${sessionScope.user.u_id != null}">
+			<input type="button" value="Save Comment" id="commentWriteBtn">
+		</c:if>
+	</div>
+</div>
 
 <!-- Comments -->
 <table id="commentContainer">
@@ -75,18 +84,30 @@ let obj = {
 			})
 			$('#commentContainer').html(html);
 		});
-	},
-	comment_insert: function() {
-		
 	}
 };
 
 obj.comment_list();
 
-$(document).on('click', '#commentInsertBtn', function(){
+$(document).on('click', '#commentWriteBtn', function(){
 	$.ajax({
-		url: "/lcomputerstudy/comment-insert.do",
-		
+		url: "/lcomputerstudy/comment-write.do",
+		data:{
+			b_idx:"${board.b_idx}",
+			u_idx:"${sessionScope.user.u_idx}",
+			c_content:$("#c_content").val(),
+		},
+		beforeSend:function() {
+			console.log("beforeSend : comment-write");
+		},
+		comple:function() {
+			console.log("complete : comment-write");
+		},
+		success:function(data) {
+			if(data.result){
+				console.log("success : comment-write");
+			}
+		}
 	})
 });
 </script>

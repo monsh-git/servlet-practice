@@ -2,10 +2,7 @@ package com.lcomputerstudy.testmvc.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,11 +15,17 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lcomputerstudy.testmvc.service.BoardService;
+import com.lcomputerstudy.testmvc.service.CommentService;
+import com.lcomputerstudy.testmvc.service.ImageService;
 import com.lcomputerstudy.testmvc.service.UserService;
 import com.lcomputerstudy.testmvc.vo.Board;
+import com.lcomputerstudy.testmvc.vo.BoardPagination;
 import com.lcomputerstudy.testmvc.vo.Comment;
-import com.lcomputerstudy.testmvc.vo.Pagination;
+import com.lcomputerstudy.testmvc.vo.Image;
 import com.lcomputerstudy.testmvc.vo.User;
+import com.lcomputerstudy.testmvc.vo.UserPagination;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @WebServlet("*.do")
 public class Controller extends HttpServlet {
@@ -36,17 +39,21 @@ public class Controller extends HttpServlet {
 		response.setContentType("text/html; charset=utf-8");
 		request.setCharacterEncoding("utf-8");
 		
-		// 
-		String requestURI = request.getRequestURI();
 		String contextPath = request.getContextPath();
+		String requestURI = request.getRequestURI();
 		String command = requestURI.substring(contextPath.length());
 		String view = null;
 		
 		// int usercount = 0;
 		String idx = null;
 		String pw = null;
-		int page = 1;
+		int u_page = 1;
+		int b_page = 1;
 		
+		ImageService imageService = null;
+		Image image = null;
+		
+		CommentService commentService = null;
 		Comment comment = null;
 		ArrayList<Comment> c_list = null;
 		
@@ -58,18 +65,18 @@ public class Controller extends HttpServlet {
 		
 		switch (command) {
 			case "/user-list.do":
-				String reqPage = request.getParameter("page");
-				if (reqPage != null) {
-					page = Integer.parseInt(reqPage);
+				String reqUPage = request.getParameter("page");
+				if (reqUPage != null) {
+					u_page = Integer.parseInt(reqUPage);
 					// page = (page-1)*3;
 				}
 				UserService userService = UserService.getInstance();
-				ArrayList<User> list = userService.getUsers(page);
-				Pagination pagination = new Pagination(page);
+				ArrayList<User> list = userService.getUsers(u_page);
+				UserPagination u_pagination = new UserPagination(u_page);
 				// usercount = userService.getUsersCount();
 				
 				request.setAttribute("list", list);
-				request.setAttribute("pagination", pagination);
+				request.setAttribute("pagination", u_pagination);
 
 				view = "user/list";
 				break;
@@ -125,11 +132,16 @@ public class Controller extends HttpServlet {
 				break;
 				
 			case "/board-list.do":
+				String reqBPage = request.getParameter("page");
+				if(reqBPage != null) {
+					b_page = Integer.parseInt(reqBPage);
+				}
 				BoardService boardService = BoardService.getInstance();
-				ArrayList<Board> b_list = boardService.getBoards();
-				// usercount = userService.getUsersCount();
+				ArrayList<Board> b_list = boardService.getBoards(b_page);
+				BoardPagination b_pagination = new BoardPagination(b_page);
 				
 				request.setAttribute("list", b_list);
+				request.setAttribute("pagination", b_pagination);
 
 				view = "board/list";
 				break;
@@ -240,26 +252,43 @@ public class Controller extends HttpServlet {
 				view = null;
 				break;
 				
-			case "/comment-insert.do":
+			case "/comment-write.do":
 				response.setContentType("application/json");
 				
 				comment = new Comment();
-				comment.setC_idx(Integer.parseInt(request.getParameter("c_idx")));
 				comment.setB_idx(Integer.parseInt(request.getParameter("b_idx")));
 				comment.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
 				comment.setC_content(request.getParameter("c_content"));
-				String c_date_str = request.getParameter("c_date");
-				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date c_date;
-				try {
-					c_date = transFormat.parse(c_date_str);
-					comment.setC_date(c_date);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+				commentService = CommentService.getInstance();
+				commentService.writeComment(comment);
+				
+				/*
+				 * String c_date_str = request.getParameter("c_date"); SimpleDateFormat
+				 * transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); Date c_date; try {
+				 * c_date = transFormat.parse(c_date_str); comment.setC_date(c_date); } catch
+				 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+				 * }
+				 */
 					
 				view = null;
+				break;
+				
+			case "/image-upload-pre.do":
+				
+				view = "board/image-upload-test";
+				break;
+			
+			case "/image-upload-test.do":
+				String realPath = request.getRealPath("upload");
+				int maxSize = 1024 * 1024 * 10;
+				MultipartRequest multipartRequest = new MultipartRequest(request, realPath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
+				String i_name = multipartRequest.getOriginalFileName("fname");
+				String i_real_name = multipartRequest.getFilesystemName("fname");
+				imageService = ImageService.getInstance();
+				imageService.insertImage(i_name, i_real_name);
+				
+				view = "/board/list";
 				break;
 		}
 		
@@ -287,8 +316,7 @@ public class Controller extends HttpServlet {
 				"/board-edit.do",
 				"/board-edit-process.do",
 				"/board-delete.do",
-				"/board-reply.do",
-				"/comment-insert.do"
+				"/board-reply.do"
 		};
 		
 		for (String item : authList) {

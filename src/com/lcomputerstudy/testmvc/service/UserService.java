@@ -25,13 +25,13 @@ public class UserService {
 	public ArrayList<User> getUsers(int page) {
 		return dao.getUsers(page);
 	}
-	
-	public void insertUser(User user) {
-		dao.insertUser(user);
-	}
-	
+
 	public int getUsersCount() {
 		return dao.getUsersCount();
+	}
+
+	public void insertUser(User user) {
+		dao.insertUser(user);
 	}
 	
 	public User loginUser(String idx, String pw) {

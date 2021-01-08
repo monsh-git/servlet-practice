@@ -72,32 +72,6 @@ public class UserDAO {
 		return list;
 	}
 	
-	public void insertUser(User user) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			conn = DBConnection.getConnection();
-			String sql = "insert into user(u_id, u_pw, u_name, u_tel, u_age) values(?, ?, ?, ?, ?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, user.getU_id());
-			pstmt.setString(2, user.getU_pw());
-			pstmt.setString(3, user.getU_name());
-			pstmt.setString(4, user.getU_tel());
-			pstmt.setString(5, user.getU_age());
-			pstmt.executeUpdate();
-		} catch (Exception ex) {
-			System.out.println("SQLException : " + ex.getMessage());
-		} finally {
-			try {
-				if (pstmt != null) pstmt.close();
-				if (conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public int getUsersCount() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -125,6 +99,32 @@ public class UserDAO {
 			}
 		}
 		return count;
+	}
+	
+	public void insertUser(User user) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			String sql = "insert into user(u_id, u_pw, u_name, u_tel, u_age) values(?, ?, ?, ?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getU_id());
+			pstmt.setString(2, user.getU_pw());
+			pstmt.setString(3, user.getU_name());
+			pstmt.setString(4, user.getU_tel());
+			pstmt.setString(5, user.getU_age());
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("SQLException : " + ex.getMessage());
+		} finally {
+			try {
+				if (pstmt != null) pstmt.close();
+				if (conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public User loginUser(String idx, String pw) {

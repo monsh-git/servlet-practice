@@ -29,21 +29,28 @@ public class BoardDAO {
 		return dao;
 	}
 	
-	public ArrayList<Board> getBoards(){
+	public ArrayList<Board> getBoards(int page){
+		int pageNum = (page-1)*10;
 		ArrayList<Board> list = null;
 		
 		try {
 			conn = DBConnection.getConnection();
 			
-			query = "SELECT * FROM board ORDER BY b_origin DESC, b_group_idx ASC";
+			query = new StringBuilder()
+					.append("SELECT		@ROWNUM := @ROWNUM - 1 AS ROWNUM, ta.*\n")
+					.append("FROM       board ta, (SELECT @rownum := (SELECT COUNT(*)-?+1 FROM board ta)) tb\n")
+					.append("ORDER BY b_origin DESC, b_group_idx ASC\n")
+					.append("LIMIT      ?, 10\n")
+					.toString();
 			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, pageNum);
+			pstmt.setInt(2, pageNum);
 			rs = pstmt.executeQuery();
 			list = new ArrayList<Board>();
 			
 			while(rs.next()) {
 				Board board = new Board();
 				board.setB_idx(rs.getInt("b_idx"));
-				
 				board.setB_content(rs.getString("b_content"));
 				board.setB_date(rs.getString("b_date"));
 				board.setB_writer(rs.getString("b_writer"));
@@ -51,6 +58,7 @@ public class BoardDAO {
 				board.setB_origin(rs.getInt("b_origin"));
 				board.setB_group_idx(rs.getInt("b_group_idx"));
 				board.setB_layer_idx(rs.getInt("b_layer_idx"));
+				board.setRownum(rs.getInt("rownum"));
 				
 				String reStr = "";
 				for(int i = 0; i < board.getB_layer_idx(); i++) {
@@ -72,6 +80,34 @@ public class BoardDAO {
 		}
 		
 		return list;
+	}
+
+	public int getBoardsCount() {
+
+		int count = 0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			String query = "SELECT COUNT(*) count FROM board";
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				count = rs.getInt("count");
+			}
+		} catch (Exception e) {
+			
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return count;
 	}
 	
 	public Board getBoard(String b_idx) {
@@ -124,8 +160,7 @@ public class BoardDAO {
 		return board;
 	}
 	
-	public void insertBoard(Board board) {
-		
+	public void insertBoard(Board board) {		
 		try {
 			conn = DBConnection.getConnection();
 			query = "INSERT INTO board(b_title, b_content, b_date, b_writer, u_idx, b_origin, b_group_idx, b_layer_idx) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";

@@ -23,18 +23,18 @@ public class BoardService {
 		return service;
 	}
 	
-	public ArrayList<Board> getBoards() {
-		return dao.getBoards();
+	public ArrayList<Board> getBoards(int page) {
+		return dao.getBoards(page);
+	}
+	
+	public int getBoardsCount() {
+		return dao.getBoardsCount();
 	}
 	
 	public Board getBoard(String b_idx) {
 		return dao.getBoard(b_idx);
 	}
-	
-	public ArrayList<Comment> getComments(String b_idx){
-		return dao.getComments(b_idx);
-	}
-	
+		
 	public void insertBoard(Board board) {
 		dao.insertBoard(board);
 	}
@@ -49,5 +49,9 @@ public class BoardService {
 	
 	public void replyBoard(Board board) {
 		dao.replyBoard(board);
+	}
+	
+	public ArrayList<Comment> getComments(String b_idx){
+		return dao.getComments(b_idx);
 	}
 }

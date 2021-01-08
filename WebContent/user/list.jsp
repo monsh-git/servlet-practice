@@ -35,6 +35,16 @@
 	}
 	li {
 		list-style:none;
+		width:auto;
+		line-height:50px;
+		border:1px solid #ededed;
+		float:left;
+		text-align:center;
+		margin:0 5px;
+		border-radius:5px;
+	}
+	.pageBtn {
+		list-style:none;
 		width:50px;
 		line-height:50px;
 		border:1px solid #ededed;
@@ -45,15 +55,15 @@
 	}
 </style>
 <body>
-<h1>회원 목록</h1>
+<h1>User List</h1>
 <ul>
-	<li><a href="board-list.do">게시판</a></li>
-	<li><a href="logout.do">로그아웃</a></li>
+	<li><a href="board-list.do">Board List</a></li>
+	<li><a href="logout.do">Logout</a></li>
 </ul>
 <br>
 	<table >
 		<tr>
-			<td colspan="3">전체 회원 수 : ${pagination.userCount}</td>
+			<td colspan="3">Total Use : ${pagination.userCount}</td>
 		<tr>
 			<th>No</th>
 			<th>ID</th>
@@ -72,12 +82,12 @@
 		<ul>
 			 <c:choose>
 				<c:when test="${ pagination.prevPage lt 5 }">
-					<li style="display:none;">
+					<li class="pageBtn" style="display:none;">
 						<span>◀</span>
 					</li>
 				</c:when>
 				<c:when test="${ pagination.prevPage ge 5}">
-					<li>
+					<li class="pageBtn">
 						<a href="user-list.do?page=${pagination.prevPage}">
 							◀
 						</a>
@@ -85,16 +95,15 @@
 				</c:when>
 			</c:choose> 
 			<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}" step="1">
-				
 					<c:choose>
 						<c:when test="${ pagination.page eq i }">
 							
-							<li style="background-color:#ededed;">
+							<li class="pageBtn" style="background-color:#ededed;">
 								<span>${i}</span>
 							</li>
 						</c:when>
 						<c:when test="${ pagination.page ne i }">
-							<li>
+							<li class="pageBtn">
 								<a href="user-list.do?page=${i}">${i}</a>
 							</li>
 						</c:when>
@@ -102,12 +111,12 @@
 			</c:forEach>
 			 <c:choose>
 				<c:when test="${ pagination.nextPage lt pagination.lastPage }">
-					<li style="">
+					<li class="pageBtn" style="">
 						<a href="user-list.do?page=${pagination.nextPage}">▶</a>
 					</li>
 				</c:when>
 				<c:when test="${ pagination.nextPage ge pagination.lastPage}">
-					<li style="display:none;">
+					<li class="pageBtn" style="display:none;">
 						<a href="user-list.do?page=${pagination.nextPage}">▶</a>
 					</li>
 				</c:when>

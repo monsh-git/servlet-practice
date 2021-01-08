@@ -11,6 +11,7 @@ public class Board {
 	private int b_group_idx;	// an index in a group
 	private int b_layer_idx;	// an index of layer in a group
 	private int b_c_count;
+	private int rownum;
 	
 	public int getB_idx() {
 		return b_idx;
@@ -71,6 +72,11 @@ public class Board {
 	}
 	public void setB_c_count(int b_c_count) {
 		this.b_c_count = b_c_count;
+	}	
+	public int getRownum() {
+		return rownum;
 	}
-	
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
 }

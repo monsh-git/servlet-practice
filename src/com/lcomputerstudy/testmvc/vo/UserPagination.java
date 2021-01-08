@@ -2,7 +2,7 @@ package com.lcomputerstudy.testmvc.vo;
 
 import com.lcomputerstudy.testmvc.service.UserService;
 
-public class Pagination {
+public class UserPagination {
 	int userCount;
 	int page;
 	int pageNum;
@@ -15,11 +15,11 @@ public class Pagination {
 	public static final int perPage=3;
 	UserService userService = null;
 	
-	public Pagination() {
+	public UserPagination() {
 		
 	}
 	
-	public Pagination(int page) {
+	public UserPagination(int page) {
 		this.page = page;
 		userService = UserService.getInstance();
 		userCount = userService.getUsersCount();
