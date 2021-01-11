@@ -1,5 +1,6 @@
 package com.lcomputerstudy.testmvc.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -280,7 +281,7 @@ public class Controller extends HttpServlet {
 				break;
 			
 			case "/image-upload-test.do":
-				String realPath = request.getRealPath("upload");
+				String realPath = "D:\\SpringToolWorkspace\\lcomputerstudy\\WebContent\\upload";
 				int maxSize = 1024 * 1024 * 10;
 				MultipartRequest multipartRequest = new MultipartRequest(request, realPath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
 				String i_name = multipartRequest.getOriginalFileName("fname");
