@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="EUC-KR">
 <title>회원 저장</title>
 </head>

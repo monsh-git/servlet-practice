@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
 <title>로그인 실패</title>
 </head>

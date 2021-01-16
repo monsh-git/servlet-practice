@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
 <title>Post View</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

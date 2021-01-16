@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
 <title>Saved Reply</title>
 </head>

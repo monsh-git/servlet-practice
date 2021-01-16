@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
-<title>로그인 중입니다.</title>
+<title>Login was successful</title>
 </head>
-<style>
+<!-- <style>
 	body {
 		margin:0;
 		padding:0;
@@ -40,13 +41,28 @@
 		text-decoration:none;
 		color:#333333;
 	}
-</style>
+</style> -->
 <body>
-<div>${sessionScope.user.u_name }님 로그인 성공</div>
-	<ul>
-		<li><a href="board-list.do">게시판</a></li>
-		<li><a href="user-list.do">회원 목록</a></li>
-		<li><a href="logout.do">로그아웃</a></li>
+<div class="container">
+	<h1>${sessionScope.user.u_name }'s Login Success</h1>
+	<hr>
+	<ul class="list-unstyled">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<li><a class="col-md-4 btn btn-default" href="board-list.do">Bulletin Board</a></li>
+		<div class="col-md-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-4"></div>
+		<li><a class="col-md-4 btn btn-default" href="user-list.do">User List</a></li>
+		<div class="col-md-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-4"></div>
+		<li><a class="col-md-4 btn btn-default" href="logout.do">Logout</a></li>
+		<div class="col-md-4"></div>
+	</div>
 	</ul>
+</div>
 </body>
 </html>

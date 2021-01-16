@@ -4,10 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
 <title>Board</title>
 </head>
-<style>
+<!-- <style>
 	h1 {
 		text-align:center;
 	}
@@ -53,85 +54,74 @@
 		margin:0 5px;
 		border-radius:5px;
 	}
-</style>
+</style> -->
 <body>
-<h1>Board</h1>
-<ul>
-	<li><a href="user-list.do">User List</a></li>
-	<li><a href="logout.do">Logout</a></li>
-</ul>
-<br>
-<table>
-	<tr>
-		<td colspan="4">Total Posts : ${pagination.boardCount}</td>
-	<tr>
-		<th>No</th>
-		<th>제목</th>
-		<th>작성자</th>
-		<th>작성일</th>
-	</tr>
-	<c:forEach items="${list}" var="item" varStatus="status">
-	<tr>
-		<td>${item.b_idx}</td>
-		<td><a href="board-detail.do?b_idx=${item.b_idx}">${item.b_title}</a></td>
-		<td>${item.b_writer}</td>
-		<td>${item.b_date}</td>
-	</tr>
-	</c:forEach>
-</table>
-<!-- Pagination -->
-<div>
-	<ul>
-		 <c:choose>
-			<c:when test="${ pagination.prevPage lt 5 }">
-				<li class="pageBtn" style="display:none;">
-					<span>◀</span>
-				</li>
-			</c:when>
-			<c:when test="${ pagination.prevPage ge 5}">
-				<li class="pageBtn" >
-					<a href="board-list.do?page=${pagination.prevPage}">
+<div class="container">
+	<h1>Board</h1>
+	<div class="col-md-10"></div>
+	<div class="col-md-1"><a class="btn btn-primary" href="user-list.do">User List</a></div>
+	<div class="col-md-1"><a class="btn btn-primary" href="logout.do">Logout</a></div>
+	<hr>
+	<table class="table">
+		<tr>
+			<td colspan="4">Total Posts : ${pagination.boardCount}</td>
+		<tr>
+			<th>No</th>
+			<th>Title</th>
+			<th>Writer</th>
+			<th>Date</th>
+		</tr>
+		<c:forEach items="${list}" var="item" varStatus="status">
+		<tr>
+			<td>${item.b_idx}</td>
+			<td><a href="board-detail.do?b_idx=${item.b_idx}">${item.b_title}</a></td>
+			<td>${item.b_writer}</td>
+			<td>${item.b_date}</td>
+		</tr>
+		</c:forEach>
+	</table>
+	<!-- Pagination -->
+	<div>
+		<ul>
+			 <c:choose>
+				<c:when test="${ pagination.prevPage lt 5 }">
+					<span class="btn btn-default col-md-1" style="display:none;">◀</span>
+				</c:when>
+				<c:when test="${ pagination.prevPage ge 5}">
+					<a class="btn btn-default col-md-1" href="board-list.do?page=${pagination.prevPage}">
 						◀
 					</a>
-				</li>
-			</c:when>
-		</c:choose> 
-		<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}" step="1">
-				<c:choose>
-					<c:when test="${ pagination.page eq i }">
-						
-						<li class="pageBtn" style="background-color:#ededed;">
-							<span>${i}</span>
-						</li>
-					</c:when>
-					<c:when test="${ pagination.page ne i }">
-						<li class="pageBtn" >
-							<a href="board-list.do?page=${i}">${i}</a>
-						</li>
-					</c:when>
-				</c:choose>
-		</c:forEach>
-		 <c:choose>
-			<c:when test="${ pagination.nextPage lt pagination.lastPage }">
-				<li class="pageBtn" style="">
-					<a href="board-list.do?page=${pagination.nextPage}">▶</a>
-				</li>
-			</c:when>
-			<c:when test="${ pagination.nextPage ge pagination.lastPage}">
-				<li class="pageBtn" style="display:none;">
-					<a href="board-list.do?page=${pagination.nextPage}">▶</a>
-				</li>
-			</c:when>
-		</c:choose> 
-		<%--  <li>
-			<a href="user-list.do?page=${pagination.nextPage}">▶</a>
-		</li>  --%>
-	</ul>
-</div>
-<!-- board-insert -->
-<div style="height:50px;">
-	<div style="border:none;">
-		<a href="board-insert.do" style="width:70%; font-weight:700; background-color:#818181; color:#fff;">Write a post</a>
+				</c:when>
+			</c:choose> 
+			<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}" step="1">
+					<c:choose>
+						<c:when test="${ pagination.page eq i }">
+							<span class="btn btn-default col-md-1">${i}</span>
+						</c:when>
+						<c:when test="${ pagination.page ne i }">
+							<a class="btn btn-default col-md-1" href="board-list.do?page=${i}">${i}</a>
+						</c:when>
+					</c:choose>
+			</c:forEach>
+			 <c:choose>
+				<c:when test="${ pagination.nextPage lt pagination.lastPage }">
+					<a class="btn btn-default col-md-1" href="board-list.do?page=${pagination.nextPage}">▶</a>
+				</c:when>
+				<c:when test="${ pagination.nextPage ge pagination.lastPage}">
+					<a class="btn btn-default col-md-1" style="display:none;" href="board-list.do?page=${pagination.nextPage}">▶</a>
+				</c:when>
+			</c:choose> 
+			<%--  <li>
+				<a href="user-list.do?page=${pagination.nextPage}">▶</a>
+			</li>  --%>
+		</ul>
+	</div>
+	<!-- board-insert -->
+	<div class="row"></div>
+	<hr>
+	<div class="col-md-11"></div>
+	<div class="col-md-1">
+		<a class="btn btn-primary" href="board-insert.do">Write a post</a>
 	</div>
 </div>
 </body>

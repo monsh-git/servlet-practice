@@ -4,10 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="./header.jsp" %>
 <meta charset="UTF-8">
 <title>User List</title>
 </head>
-<style>
+<!-- <style>
 	h1 {
 		text-align:center;
 	}
@@ -53,28 +54,28 @@
 		margin:0 5px;
 		border-radius:5px;
 	}
-</style>
+</style> -->
 <body>
-<h1>User List</h1>
-<ul>
-	<li><a href="board-list.do">Board List</a></li>
-	<li><a href="logout.do">Logout</a></li>
-</ul>
-<br>
-	<table >
+<div class="container">
+	<h1>User List</h1>
+	<div class="col-md-10"></div>
+	<div class="col-md-1"><a class="btn btn-primary" href="board-list.do">Board List</a></div>
+	<div class="col-md-1"><a class="btn btn-primary" href="logout.do">Logout</a></div>
+	<hr>
+	<table class="table">
 		<tr>
 			<td colspan="3">Total Use : ${pagination.userCount}</td>
 		<tr>
 			<th>No</th>
 			<th>ID</th>
-			<th>이름</th>
+			<th>Name</th>
 		</tr>
 		<c:forEach items="${list}" var="item" varStatus="status">
-			 <tr>
-				<td><a href="user-detail.do?u_idx=${item.u_idx}">${item.rownum}</a></td>
-				<td>${item.u_id}</td>
-				<td>${item.u_name}</td>
-		     <tr>
+		 <tr>
+			<td><a href="user-detail.do?u_idx=${item.u_idx}">${item.rownum}</a></td>
+			<td>${item.u_id}</td>
+			<td>${item.u_name}</td>
+	     <tr>
 		</c:forEach>
 	</table>
 <!-- 아래부터 pagination -->
@@ -82,43 +83,30 @@
 		<ul>
 			 <c:choose>
 				<c:when test="${ pagination.prevPage lt 5 }">
-					<li class="pageBtn" style="display:none;">
-						<span>◀</span>
-					</li>
+					<span class="btn btn-default col-md-1" style="display:none;">◀</span>
 				</c:when>
 				<c:when test="${ pagination.prevPage ge 5}">
-					<li class="pageBtn">
-						<a href="user-list.do?page=${pagination.prevPage}">
+					<a class="btn btn-default col-md-1" href="user-list.do?page=${pagination.prevPage}">
 							◀
-						</a>
-					</li>
+					</a>
 				</c:when>
 			</c:choose> 
 			<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}" step="1">
 					<c:choose>
 						<c:when test="${ pagination.page eq i }">
-							
-							<li class="pageBtn" style="background-color:#ededed;">
-								<span>${i}</span>
-							</li>
+							<span class="btn btn-default col-md-1">${i}</span>
 						</c:when>
 						<c:when test="${ pagination.page ne i }">
-							<li class="pageBtn">
-								<a href="user-list.do?page=${i}">${i}</a>
-							</li>
+							<a class="btn btn-default col-md-1" href="user-list.do?page=${i}">${i}</a>
 						</c:when>
 					</c:choose>
 			</c:forEach>
 			 <c:choose>
 				<c:when test="${ pagination.nextPage lt pagination.lastPage }">
-					<li class="pageBtn" style="">
-						<a href="user-list.do?page=${pagination.nextPage}">▶</a>
-					</li>
+					<a class="btn btn-default col-md-1" style="" href="user-list.do?page=${pagination.nextPage}">▶</a>
 				</c:when>
 				<c:when test="${ pagination.nextPage ge pagination.lastPage}">
-					<li class="pageBtn" style="display:none;">
-						<a href="user-list.do?page=${pagination.nextPage}">▶</a>
-					</li>
+					<a class="btn btn-default col-md-1" style="display:none;" href="user-list.do?page=${pagination.nextPage}">▶</a>
 				</c:when>
 			</c:choose> 
 			<%--  <li>
@@ -126,5 +114,6 @@
 			</li>  --%>
 		</ul>
 	</div>
+</div>
 </body>
 </html>
